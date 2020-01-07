@@ -8,7 +8,9 @@
 
 
     <string name="button_logar">Logar</string>
-
+    <string name="text_name">Digite seu nome</string>
+    <string name="text_password">Digite sua senha</string>
+    <string name="btn_register">Cadastrar</string>
 
 
 </resources>
