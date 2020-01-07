@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "862353818830",
+    "firebase_url": "https://messenger-91bd1.firebaseio.com",
+    "project_id": "messenger-91bd1",
+    "storage_bucket": "messenger-91bd1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:862353818830:android:d83eed32399c93e7b73c9f",
+        "android_client_info": {
+          "package_name": "com.diegoprado.messenger"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "862353818830-dog7u0jr7482nekuqla264nsq5dok2qn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.diegoprado.messenger",
+            "certificate_hash": "3cf4c304d70324a05037dbb9e46d6c9e79311436"
+          }
+        },
+        {
+          "client_id": "862353818830-c4dcgekevu6mehbe1e0t4bdue1fprno6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAYLaJb3G3yXeWcvh3xhqGThk4gi3ogA58"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "862353818830-c4dcgekevu6mehbe1e0t4bdue1fprno6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
