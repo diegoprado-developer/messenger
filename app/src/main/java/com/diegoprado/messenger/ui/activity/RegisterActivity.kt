@@ -1,7 +1,8 @@
-package com.diegoprado.messenger
+package com.diegoprado.messenger.ui.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.diegoprado.messenger.R
 
 class RegisterActivity : AppCompatActivity() {
 
