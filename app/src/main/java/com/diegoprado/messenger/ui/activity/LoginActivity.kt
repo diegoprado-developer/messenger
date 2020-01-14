@@ -10,6 +10,7 @@ import com.diegoprado.messenger.data.firebase.FirebaseConfig
 import com.diegoprado.messenger.domain.util.ValidFields
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 
 class LoginActivity : AppCompatActivity() {
 
@@ -26,6 +27,16 @@ class LoginActivity : AppCompatActivity() {
         password = findViewById(R.id.editLoginPassword)
 
         authFirebase = FirebaseConfig().getFirebaseAuth()
+    }
+
+    // manter usuario logado
+    override fun onStart() {
+        super.onStart()
+        var userActual: FirebaseUser? = authFirebase.currentUser
+
+        if (userActual != null){
+            loadMainActitty()
+        }
     }
 
     fun loggadUser(view: View){
