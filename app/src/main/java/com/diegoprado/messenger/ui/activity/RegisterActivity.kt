@@ -40,9 +40,9 @@ class RegisterActivity : AppCompatActivity() {
 
     fun validNewUser(view: View){
 
-        var name = editName?.text
-        var email = editEmail?.text
-        var password = editPass?.text
+        val name = editName?.text
+        val email = editEmail?.text
+        val password = editPass?.text
 
         ValidFields(this@RegisterActivity).validNewUser(name, email, password)
     }

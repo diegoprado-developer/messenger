@@ -12,5 +12,11 @@
     <string name="text_password">Digite sua senha</string>
     <string name="btn_register">Cadastrar</string>
 
+    <string name="text_menu_search">Pesquisar</string>
+    <string name="text_menu_config">Configurações</string>
+    <string name="text_menu_logaut">Sair</string>
+
+    <string name="fragment_chat">chat</string>
+
 
 </resources>

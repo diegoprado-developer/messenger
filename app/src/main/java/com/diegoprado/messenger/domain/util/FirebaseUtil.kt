@@ -1,7 +1,6 @@
 package com.diegoprado.messenger.domain.util
 
 import android.app.Activity
-import android.content.Context
 import android.widget.Toast
 import com.diegoprado.messenger.data.firebase.FirebaseConfig
 import com.diegoprado.messenger.domain.model.User
@@ -47,7 +46,7 @@ class FirebaseUtil(activity: Activity){
 
     fun saveNewUserFirebase(user: User){
         firebaseAuth = FirebaseConfig().getFirebaseAuth()
-        firebaseAuth.createUserWithEmailAndPassword("", "")
+        firebaseAuth.createUserWithEmailAndPassword(user.email.toString(), user.password.toString())
             .addOnCompleteListener(activityContext, object : OnCompleteListener<AuthResult> {
                 override fun onComplete(complete: Task<AuthResult>) {
                     if ( complete.isSuccessful() ){
