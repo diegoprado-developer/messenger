@@ -1,5 +1,6 @@
 package com.diegoprado.messenger
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -8,6 +9,7 @@ import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar
 import androidx.viewpager.widget.ViewPager
 import com.diegoprado.messenger.data.firebase.FirebaseConfig
+import com.diegoprado.messenger.ui.activity.ConfigActivity
 import com.diegoprado.messenger.ui.fragment.ContactsFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.ogaclejapan.smarttablayout.SmartTabLayout
@@ -56,15 +58,25 @@ class MainActivity : AppCompatActivity() {
                 logautUser()
                 finish()
             }
+
+            R.id.menuConfig -> {
+                openConfigActivity()
+                finish()
+            }
         }
         return super.onOptionsItemSelected(item)
     }
 
-    fun logautUser(){
+    private fun logautUser(){
         try{
             authFirebase?.signOut()
         }catch (e : Exception){
             e.printStackTrace()
         }
+    }
+
+    private fun openConfigActivity(){
+        val intent = Intent(this@MainActivity, ConfigActivity::class.java)
+        startActivity(intent)
     }
 }

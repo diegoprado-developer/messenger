@@ -5,7 +5,7 @@
     <item android:id="@+id/menuSearch"
         android:title="@string/text_menu_search"
         app:showAsAction="always"
-        android:icon="@drawable/ic_search_black_24dp"
+        android:icon="@drawable/ic_search_white_24dp"
         />
 
     <item android:id="@+id/menuConfig"

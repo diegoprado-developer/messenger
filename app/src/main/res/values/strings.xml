@@ -1,11 +1,12 @@
 <resources>
     <string name="app_name">Messenger</string>
 
+    <string name="app_activity_config">Configurações</string>
+
     <string name="text_email">Digite seu e-mail</string>
     <string name="text_senha">Digite sua senha</string>
     <string name="text_cadastrese">Não tem cadastro? Clique aqui!</string>
     <string name="text_logo">logo image</string>
-
 
     <string name="button_logar">Logar</string>
     <string name="text_name">Digite seu nome</string>
@@ -17,6 +18,9 @@
     <string name="text_menu_logaut">Sair</string>
 
     <string name="fragment_chat">chat</string>
+
+    <string name="informative_msg_name_user">Este não é seu nome de usuário nem sua senha.
+        Esse nome ficará visível para seus contatos no Chat</string>
 
 
 </resources>
