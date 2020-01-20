@@ -2,6 +2,7 @@ package com.diegoprado.messenger.domain.util
 
 import android.app.Activity
 import android.widget.Toast
+import com.diegoprado.messenger.data.Base64Custom.Base64Custom
 import com.diegoprado.messenger.data.firebase.FirebaseConfig
 import com.diegoprado.messenger.domain.model.User
 import com.diegoprado.messenger.ui.activity.LoginActivity
@@ -21,56 +22,63 @@ class FirebaseUtil(activity: Activity){
         firebaseAuth.signInWithEmailAndPassword(
             user.email.toString(),
             user.password.toString()
-        ).addOnCompleteListener(object: OnCompleteListener<AuthResult>{
-            override fun onComplete(complete: Task<AuthResult>) {
-                if (complete.isSuccessful){
-                    LoginActivity().loadMainActitty()
-                }else{
-                    var excecao: String = ""
+        ).addOnCompleteListener { complete ->
+            if (complete.isSuccessful){
+                LoginActivity().loadMainActitty()
+            }else{
+                var excecao: String = ""
 
-                    try {
-                        throw complete.exception!!
-                    }catch (e: FirebaseAuthInvalidCredentialsException){
-                        excecao = "E-mail e senha não correspondem a usuário cadastrado"
-                    }catch (e: FirebaseAuthInvalidUserException){
-                        excecao = "Usuário não está cadastrado"
-                    }catch (e: Exception) {
-                        excecao = "Erro ao Logar usuario: " + e.message
-                        e.printStackTrace()
-                    }
-                    Toast.makeText(activityContext, excecao, Toast.LENGTH_LONG).show()
+                try {
+                    throw complete.exception!!
+                }catch (e: FirebaseAuthInvalidCredentialsException){
+                    excecao = "E-mail e senha não correspondem a usuário cadastrado"
+                }catch (e: FirebaseAuthInvalidUserException){
+                    excecao = "Usuário não está cadastrado"
+                }catch (e: Exception) {
+                    excecao = "Erro ao Logar usuario: " + e.message
+                    e.printStackTrace()
                 }
+                Toast.makeText(activityContext, excecao, Toast.LENGTH_LONG).show()
             }
-        })
+        }
     }
 
     fun saveNewUserFirebase(user: User){
         firebaseAuth = FirebaseConfig().getFirebaseAuth()
         firebaseAuth.createUserWithEmailAndPassword(user.email.toString(), user.password.toString())
-            .addOnCompleteListener(activityContext, object : OnCompleteListener<AuthResult> {
-                override fun onComplete(complete: Task<AuthResult>) {
-                    if ( complete.isSuccessful() ){
-                        Toast.makeText(activityContext, "Usuario cadastrado com sucesso", Toast.LENGTH_LONG)
-                            .show()
-                    }else{
-                        var excecao: String = ""
+            .addOnCompleteListener(activityContext) { complete ->
+                if ( complete.isSuccessful ){
+                    Toast.makeText(activityContext, "Usuario cadastrado com sucesso", Toast.LENGTH_LONG)
+                        .show()
 
-                        try {
-                            throw complete.exception!!
-                        }catch (e: FirebaseAuthWeakPasswordException){
-                            excecao = "Digite uma senha mais forte"
-                        }catch (e: FirebaseAuthInvalidCredentialsException){
-                            excecao = "Digite um e-mail valido"
-                        }catch (e: FirebaseAuthUserCollisionException){
-                            excecao = "Conta já cadastradada"
-                        }catch (e: Exception) {
-                            excecao = "Erro ao cadastrar usuario: " + e.message
-                            e.printStackTrace()
-                        }
+                    try {
+                        val identifyUser = Base64Custom.codificarBase64(user.email.toString())
+                        user.id = identifyUser
+                        user.salveNewUser()
 
-                        Toast.makeText(activityContext, excecao, Toast.LENGTH_LONG).show()
+                        activityContext.finish()
+                    }catch (e: java.lang.Exception){
+                        e.printStackTrace()
                     }
+
+                }else{
+                    var excecao: String = ""
+
+                    try {
+                        throw complete.exception!!
+                    }catch (e: FirebaseAuthWeakPasswordException){
+                        excecao = "Digite uma senha mais forte"
+                    }catch (e: FirebaseAuthInvalidCredentialsException){
+                        excecao = "Digite um e-mail valido"
+                    }catch (e: FirebaseAuthUserCollisionException){
+                        excecao = "Conta já cadastradada"
+                    }catch (e: Exception) {
+                        excecao = "Erro ao cadastrar usuario: " + e.message
+                        e.printStackTrace()
+                    }
+
+                    Toast.makeText(activityContext, excecao, Toast.LENGTH_LONG).show()
                 }
-            })
+            }
     }
 }

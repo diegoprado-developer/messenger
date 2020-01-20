@@ -10,6 +10,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.viewpager.widget.ViewPager
 import com.diegoprado.messenger.data.firebase.FirebaseConfig
 import com.diegoprado.messenger.ui.activity.ConfigActivity
+import com.diegoprado.messenger.ui.activity.LoginActivity
 import com.diegoprado.messenger.ui.fragment.ContactsFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.ogaclejapan.smarttablayout.SmartTabLayout
@@ -70,6 +71,8 @@ class MainActivity : AppCompatActivity() {
     private fun logautUser(){
         try{
             authFirebase?.signOut()
+            val intent = Intent(this@MainActivity, LoginActivity::class.java)
+            startActivity(intent)
         }catch (e : Exception){
             e.printStackTrace()
         }

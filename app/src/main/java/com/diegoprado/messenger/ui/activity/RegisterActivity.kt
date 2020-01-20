@@ -5,15 +5,13 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.Toast
+import androidx.appcompat.widget.Toolbar
 import com.diegoprado.messenger.R
 import com.diegoprado.messenger.data.firebase.FirebaseConfig
 import com.diegoprado.messenger.domain.model.User
-import com.diegoprado.messenger.domain.util.ValidFields
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
+import com.diegoprado.messenger.domain.util.FirebaseUtil
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.*
-import org.w3c.dom.Text
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -23,18 +21,20 @@ class RegisterActivity : AppCompatActivity() {
 
     private var btnNewUser: Button? = null
 
-    private var authFirebase: FirebaseAuth? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
 
+        val toolbar: Toolbar = findViewById(R.id.toolbar)
+        toolbar.setTitle(R.string.app_name)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         editName = findViewById(R.id.editName)
         editEmail = findViewById(R.id.editEmail)
         editPass = findViewById(R.id.editPassword)
         btnNewUser = findViewById(R.id.btnNewUser)
-
-        authFirebase = FirebaseConfig().getFirebaseAuth()
 
     }
 
@@ -44,6 +44,26 @@ class RegisterActivity : AppCompatActivity() {
         val email = editEmail?.text
         val password = editPass?.text
 
-        ValidFields(this@RegisterActivity).validNewUser(name, email, password)
+        val user = User()
+
+        if (!name?.isEmpty()!!){
+            if(!email?.isEmpty()!!){
+                if (!password?.isEmpty()!!){
+
+                    user.name = name.toString()
+                    user.email = email.toString()
+                    user.password = password.toString()
+
+                    FirebaseUtil(this@RegisterActivity).saveNewUserFirebase(user)
+
+                }else{
+                    Toast.makeText(this@RegisterActivity, "Preencha a senha!", Toast.LENGTH_LONG).show()
+                }
+            }else{
+                Toast.makeText(this@RegisterActivity, "Preencha o e-mail!", Toast.LENGTH_LONG).show()
+            }
+        }else{
+            Toast.makeText(this@RegisterActivity, "Preencha o nome!", Toast.LENGTH_LONG).show()
+        }
     }
 }
