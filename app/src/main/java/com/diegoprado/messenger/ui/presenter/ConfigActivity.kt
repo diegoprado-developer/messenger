@@ -1,4 +1,4 @@
-package com.diegoprado.messenger.ui.activity
+package com.diegoprado.messenger.ui.presenter
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -17,6 +17,5 @@ class ConfigActivity : AppCompatActivity() {
 
         //adc botão voltar na toolbar - adc como filha de mainactivity no manifest
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
     }
 }

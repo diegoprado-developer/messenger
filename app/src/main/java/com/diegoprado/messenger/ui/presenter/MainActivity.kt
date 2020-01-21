@@ -1,4 +1,4 @@
-package com.diegoprado.messenger
+package com.diegoprado.messenger.ui.presenter
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -7,11 +7,13 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager
+import com.diegoprado.messenger.R
 import com.diegoprado.messenger.data.firebase.FirebaseConfig
-import com.diegoprado.messenger.ui.activity.ConfigActivity
-import com.diegoprado.messenger.ui.activity.LoginActivity
 import com.diegoprado.messenger.ui.fragment.ContactsFragment
+import com.diegoprado.messenger.ui.viewmodel.LoginViewModel
+import com.diegoprado.messenger.ui.viewmodel.MainActivityViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.ogaclejapan.smarttablayout.SmartTabLayout
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter
@@ -20,6 +22,9 @@ import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems
 class MainActivity : AppCompatActivity() {
 
     var authFirebase: FirebaseAuth? = null
+
+    private lateinit var viewModelLogin: MainActivityViewModel
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +36,7 @@ class MainActivity : AppCompatActivity() {
         toolbar.setTitle(R.string.app_name)
         setSupportActionBar(toolbar)
 
-        val tabAdapter: FragmentPagerItemAdapter = FragmentPagerItemAdapter(
+        val tabAdapter = FragmentPagerItemAdapter(
             supportFragmentManager,
             FragmentPagerItems.with(this@MainActivity)
                 .add("Chat", ContactsFragment::class.java)
@@ -43,6 +48,9 @@ class MainActivity : AppCompatActivity() {
 
         val viewPagerTab: SmartTabLayout = findViewById(R.id.viewpagertab)
         viewPagerTab.setViewPager(viewPager)
+
+        viewModelLogin = ViewModelProviders.of(this).get(MainActivityViewModel::class.java)
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

@@ -1,4 +1,4 @@
-package com.diegoprado.messenger.ui.activity
+package com.diegoprado.messenger.ui.presenter
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -6,12 +6,14 @@ import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProviders
 import com.diegoprado.messenger.R
-import com.diegoprado.messenger.data.firebase.FirebaseConfig
 import com.diegoprado.messenger.domain.model.User
 import com.diegoprado.messenger.domain.util.FirebaseUtil
+import com.diegoprado.messenger.ui.viewmodel.LoginViewModel
+import com.diegoprado.messenger.ui.viewmodel.RegisterViewModel
 import com.google.android.material.textfield.TextInputEditText
-import com.google.firebase.auth.*
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -20,6 +22,8 @@ class RegisterActivity : AppCompatActivity() {
     private var editPass: TextInputEditText? = null
 
     private var btnNewUser: Button? = null
+
+    private lateinit var viewModelRegister: RegisterViewModel
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,34 +40,14 @@ class RegisterActivity : AppCompatActivity() {
         editPass = findViewById(R.id.editPassword)
         btnNewUser = findViewById(R.id.btnNewUser)
 
+        viewModelRegister = ViewModelProviders.of(this).get(RegisterViewModel::class.java)
     }
 
     fun validNewUser(view: View){
-
         val name = editName?.text
         val email = editEmail?.text
         val password = editPass?.text
 
-        val user = User()
-
-        if (!name?.isEmpty()!!){
-            if(!email?.isEmpty()!!){
-                if (!password?.isEmpty()!!){
-
-                    user.name = name.toString()
-                    user.email = email.toString()
-                    user.password = password.toString()
-
-                    FirebaseUtil(this@RegisterActivity).saveNewUserFirebase(user)
-
-                }else{
-                    Toast.makeText(this@RegisterActivity, "Preencha a senha!", Toast.LENGTH_LONG).show()
-                }
-            }else{
-                Toast.makeText(this@RegisterActivity, "Preencha o e-mail!", Toast.LENGTH_LONG).show()
-            }
-        }else{
-            Toast.makeText(this@RegisterActivity, "Preencha o nome!", Toast.LENGTH_LONG).show()
-        }
+        viewModelRegister.registerNewUser(name, email, password, this)
     }
 }
