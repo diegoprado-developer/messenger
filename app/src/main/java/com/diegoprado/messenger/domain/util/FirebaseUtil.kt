@@ -1,31 +1,30 @@
 package com.diegoprado.messenger.domain.util
 
-import android.app.Activity
-import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import com.diegoprado.messenger.data.Base64Custom.Base64Custom
 import com.diegoprado.messenger.data.firebase.FirebaseConfig
 import com.diegoprado.messenger.domain.model.User
-import com.diegoprado.messenger.ui.presenter.LoginActivity
+import com.diegoprado.messenger.ui.presenter.IContractFirebase
 import com.google.firebase.auth.*
 
-class FirebaseUtil(activity: Activity){
+class FirebaseUtil {
 
     private lateinit var firebaseAuth: FirebaseAuth
-    private var activityContext = activity
 
-
-    fun authenticFirebaseUser(user: MutableLiveData<User>){
+    fun authenticFirebaseUser(user: MutableLiveData<User>, activity: IContractFirebase) {
         firebaseAuth = FirebaseConfig().getFirebaseAuth()
 
         firebaseAuth.signInWithEmailAndPassword(
             user.value?.email.toString(),
-            user.value?.password.toString()
-        ).addOnCompleteListener { complete ->
+            user.value?.password.toString()).addOnCompleteListener(activity.getContext()) { complete ->
             if (complete.isSuccessful){
-                LoginActivity().loadMainActitty()
+
+                activity.OnSuccess()
+                activity.getContext().finish()
+
             }else{
-                var excecao: String = ""
+
+                var excecao = ""
 
                 try {
                     throw complete.exception!!
@@ -37,25 +36,22 @@ class FirebaseUtil(activity: Activity){
                     excecao = "Erro ao Logar usuario: " + e.message
                     e.printStackTrace()
                 }
-                Toast.makeText(activityContext, excecao, Toast.LENGTH_LONG).show()
+               activity.OnError(excecao)
             }
         }
     }
 
-    fun saveNewUserFirebase(user: MutableLiveData<User>){
+    fun saveNewUserFirebase(user: MutableLiveData<User>, activity: IContractFirebase){
         firebaseAuth = FirebaseConfig().getFirebaseAuth()
         firebaseAuth.createUserWithEmailAndPassword(user.value?.email.toString(), user.value?.password.toString())
-            .addOnCompleteListener(activityContext) { complete ->
+            .addOnCompleteListener(activity.getContext()) { complete ->
                 if ( complete.isSuccessful ){
-                    Toast.makeText(activityContext, "Usuario cadastrado com sucesso", Toast.LENGTH_LONG)
-                        .show()
-
                     try {
                         val identifyUser = Base64Custom.codificarBase64(user.value?.email.toString())
                         user.value?.id = identifyUser
                         user.value?.salveNewUser()
 
-                        activityContext.finish()
+                        activity.OnSuccess()
                     }catch (e: java.lang.Exception){
                         e.printStackTrace()
                     }
@@ -76,7 +72,7 @@ class FirebaseUtil(activity: Activity){
                         e.printStackTrace()
                     }
 
-                    Toast.makeText(activityContext, excecao, Toast.LENGTH_LONG).show()
+                    activity.OnError(excecao)
                 }
             }
     }

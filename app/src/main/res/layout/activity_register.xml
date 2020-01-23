@@ -4,10 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/registerLayout"
     android:background="@color/colorGreeyBackground"
     tools:context=".ui.presenter.RegisterActivity">
 
-    <include layout="@layout/toolbar" />
+    <include
+        android:id="@+id/include2"
+        layout="@layout/toolbar" />
 
     <ImageView
         android:id="@+id/imageView2"
@@ -102,4 +105,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout3"
         app:layout_constraintVertical_chainStyle="packed" />
+
+    <include
+        android:id="@+id/icdLoader"
+        layout="@layout/fragment_loading"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/include2" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

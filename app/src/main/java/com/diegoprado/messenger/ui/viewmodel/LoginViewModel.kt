@@ -1,37 +1,40 @@
 package com.diegoprado.messenger.ui.viewmodel
 
-import android.app.Activity
-import android.app.Application
 import android.text.Editable
-import android.widget.Toast
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.diegoprado.messenger.data.firebase.FirebaseConfig
 import com.diegoprado.messenger.domain.model.User
 import com.diegoprado.messenger.domain.util.FirebaseUtil
+import com.diegoprado.messenger.ui.presenter.IContractFirebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 
-class LoginViewModel(application: Application) : AndroidViewModel(application) {
+class LoginViewModel : ViewModel() {
 
     private var userLogin: MutableLiveData<User> = MutableLiveData()
     var statuslogin: MutableLiveData<Boolean> = MutableLiveData()
 
+
     private var authFirebase: FirebaseAuth = FirebaseConfig().getFirebaseAuth()
 
-    fun loginUser(email: Editable?, password: Editable?, loginActivity: Activity){
+    fun loginUser(email: String?, password: String?, loginActivity: IContractFirebase){
         if(!email?.isEmpty()!!){
             if (!password?.isEmpty()!!){
 
-                userLogin.value?.email = email.toString()
-                userLogin.value?.password = password.toString()
+                val user = User()
+                user.password = password.toString()
+                user.email = email.toString()
+                userLogin.value = user
 
-                FirebaseUtil(loginActivity).authenticFirebaseUser(userLogin)
+
+                FirebaseUtil().authenticFirebaseUser(userLogin, loginActivity)
+
             }else{
-                Toast.makeText(loginActivity, "Preencha a senha!", Toast.LENGTH_LONG).show()
+               loginActivity.OnError("Senha invalida")
             }
         }else{
-            Toast.makeText(loginActivity, "Preencha o e-mail!", Toast.LENGTH_LONG).show()
+            loginActivity.OnError("Email Invalido")
         }
     }
 
@@ -42,5 +45,4 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
             statuslogin.value = true
         }
     }
-
 }

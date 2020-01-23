@@ -7,12 +7,12 @@ import com.google.firebase.database.Exclude
 class User {
 
     @get:Exclude
-    var id: String? = null
+    var id: String = ""
     @get:Exclude
-    var password: String? = null
+    var password: String = ""
 
-    var name: String? = null
-    var email: String? = null
+    var name: String = ""
+    var email: String = ""
 
     fun salveNewUser(){
         val firebaseDatabase: DatabaseReference = FirebaseConfig().getFirebaseDatabase()
