@@ -76,4 +76,18 @@ class FirebaseUtil {
                 }
             }
     }
+
+    fun getIdentifyUser(): String{
+
+        val userAuth: FirebaseAuth = FirebaseConfig().getFirebaseAuth()
+        val user: String = userAuth.currentUser?.email.toString()
+        val identifyUser: String = Base64Custom.codificarBase64(user)
+
+        return identifyUser
+    }
+
+    fun getLoggedUser(): FirebaseUser? {
+        val userAuth: FirebaseAuth = FirebaseConfig().getFirebaseAuth()
+        return userAuth.currentUser
+    }
 }

@@ -13,7 +13,6 @@ class Permission {
 
         fun verifyAccpetedsPermissions(permissions: Array<String>, activity: Activity, requestCode: Int){
 
-
             if (Build.VERSION.SDK_INT >= 23){
 
                 val listPermission = arrayListOf<String>()
