@@ -6,22 +6,29 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
+import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.view.KeyEvent
+import android.view.KeyEvent.KEYCODE_ENTER
 import android.view.View
+import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.Toast
-import android.widget.ViewFlipper
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProviders
+import com.bumptech.glide.Glide
 import com.diegoprado.messenger.R
 import com.diegoprado.messenger.data.helper.Permission
+import com.diegoprado.messenger.domain.model.User
 import com.diegoprado.messenger.domain.util.FirebaseUtil
 import com.diegoprado.messenger.ui.viewmodel.ConfigViewModel
 import com.google.firebase.auth.FirebaseUser
 import de.hdodenhof.circleimageview.CircleImageView
+import kotlinx.android.synthetic.main.activity_config.*
 import java.lang.Exception
 
 class ConfigActivity : AppCompatActivity(), IContractFirebase {
@@ -29,11 +36,15 @@ class ConfigActivity : AppCompatActivity(), IContractFirebase {
     private val permissionRequired =
         arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.CAMERA)
 
+
+    private var editName: EditText? = null
+
     private var imgCam: ImageButton? = null
     private var imgGallery: ImageButton? = null
+    lateinit var imgUpdateName: ImageView
 
-    val CAMERA_REQUEST = 100
-    val GALLERY_REQUEST = 200
+    private val CAMERA_REQUEST = 100
+    private val GALLERY_REQUEST = 200
 
     private var imgCirclePerfil: CircleImageView? = null
     private var configViewModel: ConfigViewModel? = null
@@ -53,11 +64,27 @@ class ConfigActivity : AppCompatActivity(), IContractFirebase {
 
         configViewModel = ViewModelProviders.of(this@ConfigActivity).get(ConfigViewModel::class.java)
 
-        imgCam = findViewById(R.id.imgButtonCam)
-        imgGallery = findViewById(R.id.imgButtonGallery)
-        imgCirclePerfil = findViewById(R.id.circleImgViewPhotoProfile)
+        imgCam              = findViewById(R.id.imgButtonCam)
+        imgGallery          = findViewById(R.id.imgButtonGallery)
+        editName            = findViewById(R.id.editPerfilName)
+        imgUpdateName       = findViewById(R.id.imgUpdateName)
+        val imgCirclePerfil = findViewById<CircleImageView>(R.id.circleImgViewPhotoProfile)
 
         val user: FirebaseUser? = FirebaseUtil().getLoggedUser()
+        val url: Uri? = user?.photoUrl
+
+        configViewModel?.getUserLogged()
+
+        if (url != null){
+            Glide.with(this@ConfigActivity)
+                .load(url)
+                .into(imgCirclePerfil)
+        }else{
+            imgCirclePerfil?.setImageResource(R.drawable.padrao)
+        }
+
+        //recuperar o texto - nome do usuario
+        editName?.setText(user?.displayName)
 
         //abrir camera
         imgCam?.setOnClickListener (object: View.OnClickListener {
@@ -77,6 +104,31 @@ class ConfigActivity : AppCompatActivity(), IContractFirebase {
                 startActivityForResult(intentGallery, GALLERY_REQUEST)
             }
         }
+
+        imgUpdateName.setOnClickListener{
+            val name: String = editName?.text.toString()
+            val mReturn = FirebaseUtil().updateUser(name)
+
+            if (mReturn){
+                configViewModel?.updateUserOn(name)
+                Toast.makeText(this@ConfigActivity, "Nome Atualizado", Toast.LENGTH_SHORT).show()
+            }
+        }
+        
+        editName?.setOnKeyListener (View.OnKeyListener { v, keyCode, event ->
+            if (keyCode == KEYCODE_ENTER || event.action === KeyEvent.ACTION_DOWN){
+                val name: String = editName?.text.toString()
+                val mReturn = FirebaseUtil().updateUser(name)
+
+                if (mReturn){
+                    configViewModel?.updateUserOn(name)
+                    Toast.makeText(this@ConfigActivity, "Nome Atualizado", Toast.LENGTH_SHORT).show()
+                }
+
+                return@OnKeyListener true
+            }
+            false
+        })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

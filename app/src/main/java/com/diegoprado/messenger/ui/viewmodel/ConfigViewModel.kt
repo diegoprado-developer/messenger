@@ -4,11 +4,10 @@ import android.graphics.Bitmap
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import com.diegoprado.messenger.data.firebase.FirebaseConfig
+import com.diegoprado.messenger.domain.model.User
 import com.diegoprado.messenger.domain.util.FirebaseUtil
-import com.diegoprado.messenger.ui.presenter.ConfigActivity
 import com.diegoprado.messenger.ui.presenter.IContractFirebase
 import com.google.android.gms.tasks.OnFailureListener
-import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
@@ -20,13 +19,14 @@ class ConfigViewModel: ViewModel() {
     private lateinit var storageImgRefFirebase: StorageReference
     private lateinit var userIdentify: String
 
+    private lateinit var userLogged: User
 
-    fun storageImgFirebase(image: Bitmap?, activity: IContractFirebase){
+    fun storageImgFirebase(image: Bitmap?, activity: IContractFirebase) {
         storageImgRefFirebase = FirebaseConfig().getFirebaseStorage()
         userIdentify = FirebaseUtil().getIdentifyUser()
 
         //recuperar dados da img para o firebase
-        val imageByte: ByteArrayOutputStream = ByteArrayOutputStream()
+        val imageByte = ByteArrayOutputStream()
         image?.compress(Bitmap.CompressFormat.JPEG, 70, imageByte)
         val imgData = imageByte.toByteArray()
 
@@ -38,24 +38,38 @@ class ConfigViewModel: ViewModel() {
             .child("perfil.jpeg")
 
         val upLoadTask: UploadTask = storageImg.putBytes(imgData)
-        upLoadTask.addOnFailureListener(object: OnFailureListener {
+        upLoadTask.addOnFailureListener(object : OnFailureListener {
             override fun onFailure(p0: Exception) {
                 activity.OnError("Error ao fazer UPLOAD da imagem")
             }
-        }).addOnSuccessListener(object: OnSuccessListener<UploadTask.TaskSnapshot>{
-            override fun onSuccess(taskSnapshot: UploadTask.TaskSnapshot?) {
+            //usando lambda
+        }).addOnSuccessListener { taskSnapshot ->
+            val url: Task<Uri>? = taskSnapshot?.metadata?.reference?.downloadUrl
 
-                val url: Task<Uri>? = taskSnapshot?.metadata?.reference?.downloadUrl?.addOnSuccessListener {  }
-                url?.addOnSuccessListener (object: OnSuccessListener<Uri>{
-                    override fun onSuccess(p0: Uri?) {
-                        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-                    }
-                })
-
+            url?.addOnSuccessListener { urlResultUpdate ->
+                updatePhotoUser(urlResultUpdate, activity = activity)
                 activity.OnSuccess()
             }
-        })
-
+        }
     }
 
+    fun getUserLogged(){
+        userLogged = FirebaseUtil().getUserDataLogged()
+    }
+
+    fun updatePhotoUser(uri: Uri?, activity: IContractFirebase){
+        val isOk = FirebaseUtil().updateUserPhoto(uri)
+
+        if (isOk){
+            userLogged.photo = uri.toString()
+            userLogged.updateUser()
+
+            activity.OnSuccess()
+        }
+    }
+
+    fun updateUserOn(name: String){
+        userLogged.name = name
+        userLogged.updateUser()
+    }
 }

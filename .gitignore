@@ -18,6 +18,7 @@
 .gradle/5.4.1/javaCompile/javaCompile.lock
 .gradle/5.4.1/javaCompile/taskHistory.bin
 .gradle/buildOutputCleanup/buildOutputCleanup.lock
+.idea/caches/build_file_checksums.ser
 .idea/workspace.xml
 .DS_Store
 /build
