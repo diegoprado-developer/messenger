@@ -8,6 +8,12 @@
         android:icon="@drawable/ic_search_white_24dp"
         />
 
+    <item android:id="@+id/menuAdd"
+        android:title="@string/text_menu_add"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_person_add_24dp"
+        />
+
     <item android:id="@+id/menuConfig"
         android:title="@string/text_menu_config"
         app:showAsAction="never"

@@ -4,14 +4,10 @@
 
     <uses-feature
         android:name="android.hardware.camera2"
-        android:required="true"
-        />
+        android:required="true" />
 
-    <uses-permission
-        android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission
-        android:name="android.permission.CAMERA"/>
-
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"
@@ -21,10 +17,20 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".ui.presenter.ChatActivity"
+            android:label="@string/title_activity_chat"
+            android:parentActivityName=".ui.presenter.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.diegoprado.messenger.ui.presenter.MainActivity" />
+        </activity>
+        <activity
             android:name=".ui.presenter.ConfigActivity"
-            android:parentActivityName=".ui.presenter.MainActivity"/>
-        <activity android:name=".ui.presenter.RegisterActivity"
-            android:parentActivityName=".ui.presenter.LoginActivity"/>
+            android:parentActivityName=".ui.presenter.MainActivity" />
+        <activity
+            android:name=".ui.presenter.RegisterActivity"
+            android:parentActivityName=".ui.presenter.LoginActivity" />
         <activity android:name=".ui.presenter.MainActivity" />
         <activity android:name=".ui.presenter.LoginActivity">
             <intent-filter>

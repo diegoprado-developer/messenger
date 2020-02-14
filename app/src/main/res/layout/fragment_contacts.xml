@@ -6,10 +6,17 @@
     tools:context=".ui.fragment.ContactsFragment">
 
     <TextView
+        android:id="@+id/labelChat"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="@string/fragment_chat"
+        android:hint="@string/fragment_chat"
         android:textSize="30sp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvContacts"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical" />
 
 </FrameLayout>

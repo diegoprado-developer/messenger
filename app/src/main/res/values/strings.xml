@@ -14,13 +14,18 @@
     <string name="btn_register">Cadastrar</string>
 
     <string name="text_menu_search">Pesquisar</string>
+    <string name="text_menu_add">Cadastrar</string>
     <string name="text_menu_config">Configurações</string>
     <string name="text_menu_logaut">Sair</string>
 
     <string name="fragment_chat">chat</string>
 
+    <string name="adapter_tvName">name</string>
+    <string name="adapter_tvEmail">e-mail</string>
+
     <string name="informative_msg_name_user">Este não é seu nome de usuário nem sua senha.
         Esse nome ficará visível para seus contatos no Chat</string>
+    <string name="title_activity_chat">ChatActivity</string>
 
 
 </resources>
