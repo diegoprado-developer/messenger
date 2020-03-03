@@ -1,6 +1,7 @@
 package com.diegoprado.messenger.ui.fragment
 
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -20,7 +21,10 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.core.content.ContextCompat
+import androidx.core.view.size
 import com.diegoprado.messenger.data.helper.RecyclerItemClickListener
+import com.diegoprado.messenger.domain.model.User
+import com.diegoprado.messenger.ui.presenter.ChatActivity
 import com.google.firebase.auth.FirebaseUser
 
 
@@ -48,13 +52,13 @@ class ContactsFragment : Fragment() {
 
         adapter = getActivity()?.let { ContactsAdapter(listContact, it) }!!
 
-        val itemDecorator = DividerItemDecoration(context!!, DividerItemDecoration.VERTICAL)
-        itemDecorator.setDrawable(ContextCompat.getDrawable(context!!, R.drawable.line_divisor)!!)
+//        val itemDecorator = DividerItemDecoration(context!!, DividerItemDecoration.VERTICAL)
+//        itemDecorator.setDrawable(ContextCompat.getDrawable(context!!, R.drawable.line_divisor)!!)
 
         val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(activity)
         recycleView.layoutManager = layoutManager
         recycleView.setHasFixedSize(true)
-        recycleView.addItemDecoration(itemDecorator)
+//        recycleView.addItemDecoration(itemDecorator)
         recycleView.addOnItemTouchListener(
 
             RecyclerItemClickListener(
@@ -62,7 +66,11 @@ class ContactsFragment : Fragment() {
                 recycleView,
                 object: RecyclerItemClickListener.OnItemClickListener{
                     override fun onItemClick(view: View, position: Int) {
-
+                        //passando o contato clicado para a tela de chat
+                        val userSelected = listContact[position]
+                        val intent: Intent = Intent(activity, ChatActivity::class.java)
+                        intent.putExtra("chatContact", userSelected)
+                        startActivity(intent)
                     }
 
                     override fun onItemClick(
@@ -83,6 +91,10 @@ class ContactsFragment : Fragment() {
         )
 
         recycleView.adapter = adapter
+
+        if (recycleView.size >= 1){
+            labelChat.visibility = View.GONE
+        }
 
         return view
     }
@@ -129,11 +141,9 @@ class ContactsFragment : Fragment() {
                     }
 
                 }
-                if (listContact.size >= 1){
+                if (listContact.size >= 1) {
                     labelChat.visibility = View.GONE
                     adapter.notifyDataSetChanged()
-                }else{
-                    labelChat.visibility = View.VISIBLE
                 }
             }
         }

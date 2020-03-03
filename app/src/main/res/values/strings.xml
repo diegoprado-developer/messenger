@@ -27,5 +27,7 @@
         Esse nome ficará visível para seus contatos no Chat</string>
     <string name="title_activity_chat">ChatActivity</string>
 
+    <string name="text_mensagem">Olá, tudo bem?</string>
+
 
 </resources>

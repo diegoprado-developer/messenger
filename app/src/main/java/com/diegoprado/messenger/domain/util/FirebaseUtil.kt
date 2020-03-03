@@ -174,15 +174,21 @@ class FirebaseUtil {
     }
 
     fun getUserContacts(): DatabaseReference {
-        firebaseDataRef = FirebaseConfig().getFirebaseDatabase().child("contatos")
+        firebaseDataRef = getFirebaseReference().child("contatos")
 
        return firebaseDataRef
+    }
+
+    fun getFirebaseReference(): DatabaseReference {
+        firebaseDataRef = FirebaseConfig().getFirebaseDatabase()
+
+        return firebaseDataRef
     }
 
     fun contactUserAdd(identify: String, activity: IContractFirebase){
         val identifyUserContact = Base64Custom.codificarBase64(identify)
 
-        firebaseDataRef = FirebaseConfig().getFirebaseDatabase().child("usuarios").child(identifyUserContact)
+        firebaseDataRef = getFirebaseReference().child("usuarios").child(identifyUserContact)
 
         firebaseDataRef.addListenerForSingleValueEvent(object: ValueEventListener{
             override fun onCancelled(dataError: DatabaseError) {
@@ -198,7 +204,7 @@ class FirebaseUtil {
                     val preferences: Preferences = Preferences(activity.getContext())
                     val userOn = preferences.getIdentify()
 
-                    firebaseDataRef = FirebaseConfig().getFirebaseDatabase()
+                    firebaseDataRef = getFirebaseReference()
                     firebaseDataRef = firebaseDataRef.child("contatos")
                                             .child(userOn.toString())
                                             .child(identifyUserContact)

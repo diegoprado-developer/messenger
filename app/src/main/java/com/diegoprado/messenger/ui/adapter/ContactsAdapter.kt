@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
@@ -33,7 +34,7 @@ class ContactsAdapter(val list: List<Contact>, val context: Context): RecyclerVi
             name.text = contact.nameContact
             email.text = contact.emailContact
 
-            if (contact.photoContact != null){
+            if (contact.photoContact != null && contact.photoContact != ""){
                 val uri: Uri = Uri.parse(contact.photoContact)
                 Glide.with(context).load(uri).into(circleImg)
             }else{

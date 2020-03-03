@@ -5,10 +5,11 @@ import com.diegoprado.messenger.domain.util.FirebaseUtil
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.Exclude
+import java.io.Serializable
 import java.util.*
 import kotlin.collections.HashMap
 
-class User {
+class User : Serializable {
 
     @get:Exclude
     var id: String = ""
